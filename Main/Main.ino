@@ -1,27 +1,41 @@
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
 
-Adafruit_BME280 bme;
+//#include <Wire.h>
+//#include <Adafruit_Sensor.h>
+//#include <Adafruit_BME280.h>
+#include <ESP8266WiFi.h>
+
+
+//Adafruit_BME280 bme;
 
 void setup() {
-  Serial.begin(9600);
-  if (!bme.begin(0x76)) {
-    Serial.println("Error");
-    while (1);
+  Serial.begin(115200);
+  Serial.println();
+
+  WiFi.begin("CGA2121_7QPJvFa", "pUCafjBwtY9rcyDeb6");
+
+  Serial.print("Connecting");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
   }
+  Serial.println();
 
-}
+  Serial.print("Connected, IP address: ");
+  Serial.println(WiFi.localIP());
 
-/* Measuring temperature */
-void measure_temp()
+} 
+
+/*
+
+void measure_temp() 
 {
   Serial.print("Temperature = ");
   Serial.print(bme.readTemperature());
   Serial.println("*C");
 }
 
-/*Measuring humidity */
+
 void measure_hum()
 {
   Serial.print("Humidity = ");
@@ -29,7 +43,7 @@ void measure_hum()
   Serial.println("%");
 }
 
-/*Measuring pressure */
+
 void measure_press()
 {
   Serial.print("Pressure = ");
@@ -39,9 +53,10 @@ void measure_press()
 
 
 void loop() {
-  measure_temp();
-  measure_hum();
-  measure_press(); 
-  delay(1000);
+ // measure_temp();
+ // measure_hum();
+ // measure_press(); 
+ // delay(1000);
 
-}
+} */
+void loop() {}
