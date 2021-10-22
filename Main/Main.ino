@@ -1,4 +1,5 @@
-
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <SPI.h>
@@ -15,8 +16,11 @@
 
 const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
+const long utcOffsetInSeconds = 7200;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 WiFiServer server(80);
 
@@ -24,6 +28,8 @@ Adafruit_BME280 bme;
 
 void setup() 
 {
+  timeClient.begin();
+  
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.display();
   delay(2000);
@@ -83,7 +89,9 @@ void OLED_display(){
 
 
 void loop() {
+  timeClient.update();
   WiFiClient client = server.available();
+  
   client.print("Temperatura: ");
   client.println(bme.readTemperature());
 
@@ -94,10 +102,15 @@ void loop() {
   client.println(bme.readHumidity());
   
   OLED_display();
- // Serial.print("Temperatura = ");
-  //Serial.print(bme.readTemperature());
-  //Serial.println("*C");
   delay(1000);
+
+  Serial.print(daysOfTheWeek[timeClient.getDay()]);
+  Serial.print(", ");
+  Serial.print(timeClient.getHours());
+  Serial.print(":");
+  Serial.print(timeClient.getMinutes());
+  Serial.print(":");
+  Serial.println(timeClient.getSeconds());
   
   
   }
