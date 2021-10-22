@@ -19,6 +19,7 @@ const char* password = "pUCafjBwtY9rcyDeb6";
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 WiFiServer server(80);
+
 Adafruit_BME280 bme;
 
 void setup() 
@@ -72,20 +73,30 @@ void OLED_display(){
   display.setCursor(32,40);  
   display.print(bme.readHumidity());
   display.println("%");
-  delay(5000);
+  delay(10000);
   display.display();
 }
 
-1
+
 
 
 
 
 void loop() {
+  WiFiClient client = server.available();
+  client.print("Temperatura: ");
+  client.println(bme.readTemperature());
+
+  client.print("Cisnienie: ");
+  client.println(bme.readPressure() /100.0F);
+
+  client.print("Wilgotnosc: ");
+  client.println(bme.readHumidity());
+  
   OLED_display();
-  Serial.print("Temperatura = ");
-  Serial.print(bme.readTemperature());
-  Serial.println("*C");
+ // Serial.print("Temperatura = ");
+  //Serial.print(bme.readTemperature());
+  //Serial.println("*C");
   delay(1000);
   
   
