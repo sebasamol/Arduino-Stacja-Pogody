@@ -1,11 +1,13 @@
 
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+
 
 #define SCREEN_WIDTH 128 //szerokosc ekranu
 #define SCREEN_HEIGHT 48 //wysokosc ekranu
@@ -50,7 +52,7 @@ void setup()
 
   
 } 
-
+//WYŚWIETLANIE DANYCH Z CZUJNIKA NA OLED
 void OLED_display(){
   
   display.clearDisplay(); 
@@ -61,9 +63,6 @@ void OLED_display(){
   display.print(bme.readTemperature());
   display.println("*C");
   
-  
-  
-
   display.setTextSize(1); 
   display.setCursor(32,24);  
   display.print(bme.readPressure() /100.0F );
@@ -76,9 +75,10 @@ void OLED_display(){
   delay(5000);
   display.display();
 }
-  
-  
-  
+
+1
+
+
 
 
 void loop() {
