@@ -58,17 +58,21 @@ void OLED_display(){
 
   display.setTextColor(WHITE);
   display.setCursor(32,0);  
-  display.println(bme.readTemperature());
+  display.print(bme.readTemperature());
+  display.println("*C");
+  
   
   
 
   display.setTextSize(1); 
   display.setCursor(32,24);  
-  display.println(bme.readPressure() /100.0F );
-
+  display.print(bme.readPressure() /100.0F );
+  display.println("hPa");
+  
   display.setTextSize(1); 
   display.setCursor(32,40);  
-  display.println(bme.readHumidity());
+  display.print(bme.readHumidity());
+  display.println("%");
   delay(5000);
   display.display();
 }
