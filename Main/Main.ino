@@ -17,7 +17,7 @@
 const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
 const long utcOffsetInSeconds = 7200;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+char daysOfTheWeek[7][13] = {"Niedziela", "Poniedzialek", "Wtorek", "Sroda", "Czwartek", "Piatek", "Sobota"};
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds);
@@ -104,13 +104,14 @@ void loop() {
   OLED_display();
   delay(1000);
 
-  Serial.print(daysOfTheWeek[timeClient.getDay()]);
-  Serial.print(", ");
-  Serial.print(timeClient.getHours());
-  Serial.print(":");
-  Serial.print(timeClient.getMinutes());
-  Serial.print(":");
-  Serial.println(timeClient.getSeconds());
+  client.print(daysOfTheWeek[timeClient.getDay()]);
+  client.print(", ");
+  client.print(timeClient.getHours());
+  client.print(":");
+  client.print(timeClient.getMinutes());
+  client.print(":");
+  client.print(timeClient.getSeconds());
+  
   
   
   }
