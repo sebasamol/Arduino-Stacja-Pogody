@@ -15,7 +15,7 @@
 #define OLED_RESET     -1 
 
 
-String SendHTML(float TemperatureWeb,float HumidityWeb, String TimeWeb, String DateWeb);
+String HTML_page(float TemperatureWeb,float HumidityWeb, String TimeWeb, String DateWeb);
 float Temperature;
 float Humidity;
 
@@ -33,22 +33,23 @@ ESP8266WebServer server(80);
 Adafruit_BME280 bme;
 
 /////////////////////////////////////////PAGE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-String SendHTML(float TemperatureWeb,float HumidityWeb){
+String HTML_page(float TemperatureWeb,float HumidityWeb){
   String ptr = "<!DOCTYPE html> <html>";
   ptr +="<head>";
+  
   ptr +="<title>Stacja meteorologiczna ESP8266</title>";
-
   ptr +="</head>";
+  
   ptr +="<body>";
   ptr +="<div id=\"webpage\">";
   ptr +="<h1>Stacja meteorologiczna</h1>";
-  ptr +="<p>Aktualna godzina</p>";
+  ptr +="<p>Aktualna godzina:</p>";
 
-  ptr +="<h2>Warunki atmosferyczne na zewnątrz</h2>";
+  ptr +="<h2>Warunki atmosferyczne na zewnatrz</h2>";
   ptr +="<p>Temperatura powietrza: ";
   ptr +=(float)TemperatureWeb;
   ptr +="*C</p>";
-  ptr +="<p>Ciśnienie atmosferyczne: ";
+  ptr +="<p>Wilgotnosc powietrza: ";
   ptr +=(float)HumidityWeb;
   ptr +="%</p>";
   
@@ -120,7 +121,7 @@ void OLED_display(){
 void handleRoot(){
   Temperature = bme.readTemperature(); 
   Humidity = bme.readHumidity(); 
-  server.send(200, "text/html", SendHTML(Temperature,Humidity)); 
+  server.send(200, "text/html", HTML_page(Temperature,Humidity)); 
 
 
 }
