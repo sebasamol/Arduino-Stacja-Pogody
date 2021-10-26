@@ -37,6 +37,7 @@ Adafruit_BME280 bme;
 String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   String ptr = "<!DOCTYPE html> <html>";
   ptr +="<head>";
+  ptr +="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
   ptr +="<script>function refresh(refreshPeriod) {setTimeout('location.reload(true)', refreshPeriod);} window.onload = refresh(5000);</script>";
   ptr +="<title>Stacja meteorologiczna ESP8266</title>";
   ptr +="</head>";
