@@ -16,9 +16,9 @@
 
 
 String HTML_page(float TemperatureWeb,float HumidityWeb,float PressWeb, String TimeWeb, String DateWeb);
-float Temperature;
-float Humidity;
-float Press;
+float Temp_out;
+float Hum_out;
+float Press_out;
 
 const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
@@ -37,11 +37,15 @@ Adafruit_BME280 bme;
 String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   String ptr = "<!DOCTYPE html> <html>";
   ptr +="<head>";
-  
+  ptr +="<script>function refresh(refreshPeriod) {setTimeout('location.reload(true)', refreshPeriod);} window.onload = refresh(5000);</script>";
   ptr +="<title>Stacja meteorologiczna ESP8266</title>";
   ptr +="</head>";
   ptr +="<style>";
   ptr +="body{background-color:lemonchiffon;}";
+  ptr +="h1{font-size:200%;font-family:monospace,'Times New Roman';}";
+  ptr +="h2{font-size: 120%;font-family: monospace,'Times New Roman';}";
+  ptr +="h3{font-size: 120%;ont-family: monospace,'Times New Roman';}";
+  ptr +="p{margin: 15px;font-family: monospace,'Times New Roman';}";
   ptr +="</style>";
   
   ptr +="<body>";
@@ -126,10 +130,10 @@ void OLED_display(){
 }
 
 void handleRoot(){
-  Temperature = bme.readTemperature(); 
-  Humidity = bme.readHumidity(); 
-  Press = bme.readPressure() /100.0F;
-  server.send(200, "text/html", HTML_page(Temperature,Humidity,Press)); 
+  Temp_out = bme.readTemperature(); 
+  Hum_out = bme.readHumidity(); 
+  Press_out = bme.readPressure() /100.0F;
+  server.send(200, "text/html", HTML_page(Temp_out,Hum_out,Press_out)); 
 
 
 }
@@ -158,8 +162,8 @@ void loop() {
   client.print(timeClient.getMinutes());
   client.print(":");
   client.print(timeClient.getSeconds());
-  
   */
+  
   
   
   
