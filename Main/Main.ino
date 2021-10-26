@@ -50,7 +50,9 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   
   ptr +="<body>";
   ptr +="<div id=\"webpage\">";
+  ptr +="<center>";
   ptr +="<h1>Stacja meteorologiczna</h1>";
+  ptr +="</center>";
   ptr +="<p>Aktualna godzina:</p>";
 
   ptr +="<h2>Warunki atmosferyczne na zewnatrz</h2>";
