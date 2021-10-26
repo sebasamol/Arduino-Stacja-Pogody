@@ -14,10 +14,16 @@
 #define SCREEN_HEIGHT 48 //wysokosc ekranu
 #define OLED_RESET     -1 
 
+
+String SendHTML(float TemperatureWeb,float HumidityWeb, String TimeWeb, String DateWeb);
+float Temperature;
+float Humidity;
+
 const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
 const long utcOffsetInSeconds = 7200;
 char daysOfTheWeek[7][13] = {"Niedziela", "Poniedzialek", "Wtorek", "Sroda", "Czwartek", "Piatek", "Sobota"};
+
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds);
@@ -27,27 +33,32 @@ ESP8266WebServer server(80);
 Adafruit_BME280 bme;
 
 /////////////////////////////////////////PAGE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const char my_page[] PROGMEM = R"=====(
-<!DOCTYPE html>
-<html>
-  <head>
-      <title>Weather Station ESP8266</title>
-  </head>
-  <style>
-  p {
-    color:red;
-    font-family: courier;
-    font size:160%;
-  }
-  </style>
-<body>
-  <center>
-      <b>STACJA POGODOWA<b>
-  </center> 
-  <p>Temperatura</p>
-</body>
-</html>
-)=====";
+String SendHTML(float TemperatureWeb,float HumidityWeb){
+  String ptr = "<!DOCTYPE html> <html>";
+  ptr +="<head>";
+  ptr +="<title>Stacja meteorologiczna ESP8266</title>";
+
+  ptr +="</head>";
+  ptr +="<body>";
+  ptr +="<div id=\"webpage\">";
+  ptr +="<h1>Stacja meteorologiczna</h1>";
+  ptr +="<p>Aktualna godzina</p>";
+
+  ptr +="<h2>Warunki atmosferyczne na zewnątrz</h2>";
+  ptr +="<p>Temperatura powietrza: ";
+  ptr +=(float)TemperatureWeb;
+  ptr +="*C</p>";
+  ptr +="<p>Ciśnienie atmosferyczne: ";
+  ptr +=(float)HumidityWeb;
+  ptr +="%</p>";
+  
+  ptr +="<h3>Odczyt w domu</h3>";
+  
+  ptr +="</div>";
+  ptr +="</body>";
+  ptr +="</html>";
+  return ptr;
+}
 
 /////////////////////////////////////////SETUP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
@@ -107,11 +118,12 @@ void OLED_display(){
 }
 
 void handleRoot(){
-  String s = my_page;
-  server.send(200,"text/html",s);
+  Temperature = bme.readTemperature(); 
+  Humidity = bme.readHumidity(); 
+  server.send(200, "text/html", SendHTML(Temperature,Humidity)); 
+
+
 }
-
-
 /////////////////////////////////////////LOOP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() {
