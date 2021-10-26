@@ -22,12 +22,35 @@ char daysOfTheWeek[7][13] = {"Niedziela", "Poniedzialek", "Wtorek", "Sroda", "Cz
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-WiFiServer server(80);
 
+ESP8266WebServer server(80);
 Adafruit_BME280 bme;
 
-void setup() 
-{
+/////////////////////////////////////////PAGE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const char my_page[] PROGMEM = R"=====(
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Weather Station ESP8266</title>
+  </head>
+  <style>
+  p {
+    color:red;
+    font-family: courier;
+    font size:160%;
+  }
+  </style>
+<body>
+  <center>
+      <b>STACJA POGODOWA<b>
+  </center> 
+  <p>Temperatura</p>
+</body>
+</html>
+)=====";
+
+/////////////////////////////////////////SETUP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void setup() {
   timeClient.begin();
   
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -52,9 +75,9 @@ void setup()
   }
   Serial.println(" Connected");
 
-  server.begin();
- 
   Serial.println(WiFi.localIP());
+  server.on("/", handleRoot);
+  server.begin();
 
 
   
@@ -83,15 +106,19 @@ void OLED_display(){
   display.display();
 }
 
+void handleRoot(){
+  String s = my_page;
+  server.send(200,"text/html",s);
+}
 
 
-
-
+/////////////////////////////////////////LOOP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() {
   timeClient.update();
-  WiFiClient client = server.available();
-  
+  OLED_display();
+  server.handleClient();
+  /*
   client.print("Temperatura: ");
   client.println(bme.readTemperature());
 
@@ -102,8 +129,7 @@ void loop() {
   client.println(bme.readHumidity());
   
   OLED_display();
-  delay(1000);
-
+  
   client.print(daysOfTheWeek[timeClient.getDay()]);
   client.print(", ");
   client.print(timeClient.getHours());
@@ -111,6 +137,11 @@ void loop() {
   client.print(timeClient.getMinutes());
   client.print(":");
   client.print(timeClient.getSeconds());
+  
+  */
+  
+  
+  
   
   
   
