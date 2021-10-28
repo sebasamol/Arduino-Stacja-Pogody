@@ -69,6 +69,7 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   
   ptr +="<h2>Odczyt w domu</h3>";
   ptr +="<p>Temperatura powietrza: <br>";
+  ptr +="<p>Wilgotnosc powietrza: <br>";
   ptr +="</div>";
   ptr +="</body>";
   ptr +="</html>";
