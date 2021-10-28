@@ -43,9 +43,9 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   ptr +="</head>";
   ptr +="<style>";
   ptr +="body{background-color:lemonchiffon;}";
-  ptr +="h1{font-size:200%;font-family:monospace,'Times New Roman';}";
-  ptr +="h2{font-size: 120%;font-family: monospace,'Times New Roman';}";
-  ptr +="h3{font-size: 120%;ont-family: monospace,'Times New Roman';}";
+  ptr +="h1{font-family:monospace,'Times New Roman';}";
+  ptr +="h2{font-family: monospace,'Times New Roman';}";
+  ptr +="h3{font-family: monospace,'Times New Roman';}";
   ptr +="p{margin: 15px;font-family: monospace,'Times New Roman';}";
   ptr +="</style>";
   
@@ -57,17 +57,17 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   ptr +="<p>Aktualna godzina:</p>";
 
   ptr +="<h2>Warunki atmosferyczne na zewnatrz</h2>";
-  ptr +="<p>Temperatura powietrza: ";
+  ptr +="<p>Temperatura powietrza: <br>";
   ptr +=(float)TemperatureWeb;
   ptr +="*C</p>";
-  ptr +="<p>Wilgotnosc powietrza: ";
+  ptr +="<p>Wilgotnosc powietrza: <br>";
   ptr +=(float)HumidityWeb;
   ptr +="%</p>";
-  ptr +="<p>Cisnienie atmosferyczne: ";
+  ptr +="<p>Cisnienie atmosferyczne: <br>";
   ptr +=(float)PressWeb;
   ptr +="hPa</p>";
   
-  ptr +="<h3>Odczyt w domu</h3>";
+  ptr +="<h2>Odczyt w domu</h3>";
   
   ptr +="</div>";
   ptr +="</body>";
