@@ -36,43 +36,178 @@ Adafruit_BME280 bme;
 /////////////////////////////////////////PAGE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
   String ptr = "<!DOCTYPE html> <html>";
-  ptr +="<head>";
-  ptr +="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<script>function refresh(refreshPeriod) {setTimeout('location.reload(true)', refreshPeriod);} window.onload = refresh(5000);</script>";
-  ptr +="<title>Stacja meteorologiczna ESP8266</title>";
-  ptr +="</head>";
-  ptr +="<style>";
-  ptr +="body{background-color:lemonchiffon;}";
-  ptr +="h1{font-family:monospace,'Times New Roman';}";
-  ptr +="h2{font-family: monospace,'Times New Roman';}";
-  ptr +="h3{font-family: monospace,'Times New Roman';}";
-  ptr +="p{margin: 15px;font-family: monospace,'Times New Roman';}";
-  ptr +="</style>";
-  
-  ptr +="<body>";
-  ptr +="<div id=\"webpage\">";
-  ptr +="<center>";
-  ptr +="<h1>Stacja meteorologiczna</h1>";
-  ptr +="</center>";
-  ptr +="<p>Aktualna godzina:</p>";
+    ptr+="<html lang=\"pl-PL\">";
+    
+    ptr +="<head>";
+        ptr +="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+        ptr +="<meta http-equiv='content-language' content='pl' />";
+        ptr+="<meta charset=\"UTF-8\">";
+        ptr +="<title>Stacja meteorologiczna ESP8266 </title>";
+        ptr +="<link rel=\"icon\" href=\"https://www.flaticon.com/free-icon/station_1809820?term=weather%20station&page=1&position=11&page=1&position=11&related_id=1809820&origin=search\">";
+        
+    ptr +="<script>";
+       ptr +=" function display_c(){";
+            ptr +="var refresh=1000;";
+            ptr +="mytime=setTimeout(\'display_ct()\',refresh)";
+            ptr +="}";
 
-  ptr +="<h2>Warunki atmosferyczne na zewnatrz</h2>";
-  ptr +="<p>Temperatura powietrza: <br>";
-  ptr +=(float)TemperatureWeb;
-  ptr +="*C</p>";
-  ptr +="<p>Wilgotnosc powietrza: <br>";
-  ptr +=(float)HumidityWeb;
-  ptr +="%</p>";
-  ptr +="<p>Cisnienie atmosferyczne: <br>";
-  ptr +=(float)PressWeb;
-  ptr +="hPa</p>";
+            ptr +="function display_ct() {";
+               ptr +=" var x = new Date()";
+                ptr +="var x1=x.toUTCString();";
+                ptr +="document.getElementById(\'ct\').innerHTML = x1;";
+               ptr +=" tt=display_c();";
+            ptr +="}";
+            ptr +="setTimeout(function(){";
+           ptr +=" window.location.reload(1);";
+           ptr +=" }, 5000);";
+    ptr +="</script>";
+    ptr +="<style>";
+    ptr +="body";
+ptr +="{";
+    ptr +="background-image: radial-gradient(73% 147%, #EADFDF 59%, #ECE2DF 100%), radial-gradient(91% 146%, rgba(255,255,255,0.50) 47%, rgba(0,0,0,0.50) 100%);";
+    ptr +="background-blend-mode: screen;";
+    ptr +="background-repeat: no-repeat;";
+    ptr +="background-attachment: fixed;";
+    ptr +="background-position: center;";
+ptr +="}";
+ptr +="h1";
+ptr +="{  "; 
+  ptr +="font-weight: normal;";
+    ptr +="font-size: 40px;";
+    ptr +="padding: 10px;";
+    ptr +="text-align: center;";
+    ptr +="font-family: 'Courier New', Courier, monospace;";
+    
+    
+ptr +="}";
+
+ptr +=".container";
+ptr +="{";
+    
+    ptr +="border: 4px solid black;";
+    ptr +="border-radius: 25px;";
+    ptr +="background-color: cornsilk;";
+    ptr +="opacity: 0.65;";
+    
+ptr +="}";
+
+ptr +="h2";
+ptr +="{";
+    ptr +="text-align: center;";
+ptr +="}";
+
+ptr +=".heading p";
+ptr +="{";
+    ptr +="text-align: center;";
+    ptr +="font-size: 25px;";
+    ptr+="font-family: 'Courier New', Courier, monospace;";
+    ptr+="margin-left: 15px;";
+
+ptr +="}";
+ptr +=".heading";
+ptr +="{";
+    
+    ptr +="padding: 10px;";
+    ptr +="margin-left: 10px;";
+    
+ptr +="}";
+ptr +=".heading img";
+ptr +="{";
+    ptr +="top: 5px;";
+    ptr +="left: 5px;";
+    ptr +="position: relative;";
+    ptr +="height: 50px;";
+    ptr +="width: 50px;";
+ptr +="}";
+
+ptr +=".parametres";
+ptr +="{";
+    
+    ptr +="font-size: 18px;";
+    ptr +="padding: 10px;";
+    ptr +="font-family: 'Courier New', Courier, monospace;";
+    ptr +="display: inline-flex;";
+    ptr +="margin-left: 20px;";
+ptr +="}";
+
+ptr +="parametres img";
+ptr +="{";
+    ptr +="top: 5px;";
+    ptr +="left: 5px;";
+    ptr +="position: relative;";
+    ptr +="height: 40px;";
+    ptr +="width: 40px;";
+ptr +="}";
+ ptr +=".parametres p";
+ ptr +="{";
+     ptr +="margin-left: 10px;";
+ ptr +="}";
+ 
+
+ptr +="span";
+ptr +="{";
+    ptr +="padding: 15px;";
+    ptr +="margin-left: 15px;";
+    ptr +="font-size: 20px;";
+ptr +="}";
+    ptr +="</style>";
+   ptr +=" </head>";
+    ptr +="<body>";
+       ptr +=" <h1>Stacja meteorologiczna</h1>";
+           ptr +=" <body style=\"text-align: center; font-family: 'Courier New', Courier, mononospace;\"  onload=\"display_ct()\">";
+               ptr +="<span id=\'ct\'></span>";
+           ptr +="</body>";
+
+          ptr +="<div class=\"container\">";
+             ptr +="<div class=\"heading\">";
+                ptr +="<img src=\"(https://www.flaticon.com/premium-icon/landscape_3000665?term=outdoor&page=1&position=6&page=1&position=6&related_id=3000665&origin=search)\">";
+                 ptr +="<p>Odczyt na zewnątrz:</p>";
+             ptr +="</div>";
+                   ptr +=" <div class=\"parametres\">";
+                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/high-temperature_1585441?term=temperature&page=1&position=6&page=1&position=6&related_id=1585441&origin=search)\">";
+                      
+                       ptr +=(float)TemperatureWeb;
+                       ptr +="*C</p>";
+                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/humidity_2828582?term=humidity&page=1&position=15&page=1&position=15&related_id=2828582&origin=search)\">";
+                       
+                       ptr +=(float)HumidityWeb;
+                       ptr +="%</p>";
+                       ptr +="<img src=\"(https://www.flaticon.com/free-icon/gauge_556958?term=atmospheric%20pressure&page=1&position=1&page=1&position=1&related_id=556958&origin=search)\">";
+                       
+                       ptr +=(float)PressWeb;
+                       ptr +="hPa</p>";
+                        
+                   ptr +="</div>";
+              
+             ptr +=" <div class=\"heading\">";
+                ptr +="<img src=\"(https://www.flaticon.com/premium-icon/house_2163350?term=house&page=1&position=3&page=1&position=3&related_id=2163350&origin=search)\">";
+                ptr +="<p>Odczyt na dworze:</p>";
+               ptr +=" </div>";
+                   ptr +=" <div class=\"parametres\">";
+                      ptr +="<img srcl=\"(https://www.flaticon.com/premium-icon/high-temperature_1585441?term=temperature&page=1&position=6&page=1&position=6&related_id=1585441&origin=search)\">";
+    
+                       ptr +=(float)TemperatureWeb;
+                       ptr +="*C</p>";
+                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/humidity_2828582?term=humidity&page=1&position=15&page=1&position=15&related_id=2828582&origin=search)\">";
+                      
+                       ptr +=(float)HumidityWeb;
+                       ptr +="%</p>";
+                       ptr +="<img src=\"(https://www.flaticon.com/free-icon/gauge_556958?term=atmospheric%20pressure&page=1&position=1&page=1&position=1&related_id=556958&origin=search)\">";
+                       
+                       ptr +=(float)PressWeb;
+                       ptr +="hPa</p>";
+                        
+                    ptr +=" </div>";
+                
+           ptr +=" </div>";
+           ptr +=" <div id=\"info\">";
+              ptr +="<p>Pomiary dla miasta Poznań</p>";
+              ptr +="<a href=\"https://www.accuweather.com/pl/pl/pozna%C5%84/276594/weather-forecast/276594\">Tu znajdziesz szczegółową prognozę pogody</a>";
+           ptr+=" </div>";
+
+    ptr +="</body>";
+ptr +="</html>";
   
-  ptr +="<h2>Odczyt w domu</h3>";
-  ptr +="<p>Temperatura powietrza: <br>";
-  ptr +="<p>Wilgotnosc powietrza: <br>";
-  ptr +="</div>";
-  ptr +="</body>";
-  ptr +="</html>";
   return ptr;
 }
 
@@ -150,10 +285,8 @@ void loop() {
   /*
   client.print("Temperatura: ");
   client.println(bme.readTemperature());
-
   client.print("Cisnienie: ");
   client.println(bme.readPressure() /100.0F);
-
   client.print("Wilgotnosc: ");
   client.println(bme.readHumidity());
   
