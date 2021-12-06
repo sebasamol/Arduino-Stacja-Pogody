@@ -4,6 +4,7 @@
 #include <ESP8266WebServer.h>
 #include <SPI.h>
 #include <Wire.h>
+#include "DHT.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_Sensor.h>
@@ -13,28 +14,30 @@
 #define SCREEN_WIDTH 128 //szerokosc ekranu
 #define SCREEN_HEIGHT 48 //wysokosc ekranu
 #define OLED_RESET     -1 
+#define DHTTYPE DHT21
+#define DHTPIN 14 
 
-
-String HTML_page(float TemperatureWeb,float HumidityWeb,float PressWeb, String TimeWeb, String DateWeb);
+String HTML_page(float TemperatureWeb,float HumidityWeb,float PressWeb,float HumHouse, float TempHouse );
 float Temp_out;
 float Hum_out;
 float Press_out;
+float Temp_house;
+float Hum_house;
+
 
 const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
-const long utcOffsetInSeconds = 7200;
-char daysOfTheWeek[7][13] = {"Niedziela", "Poniedzialek", "Wtorek", "Sroda", "Czwartek", "Piatek", "Sobota"};
 
 
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds);
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+DHT dht(DHTPIN, DHTTYPE);
 ESP8266WebServer server(80);
 Adafruit_BME280 bme;
 
 /////////////////////////////////////////PAGE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb){
+String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb,float HumHouse, float TempHouse ){
   String ptr = "<!DOCTYPE html> <html>";
     ptr+="<html lang=\"pl-PL\">";
     
@@ -181,21 +184,20 @@ ptr +="}";
               
              ptr +=" <div class=\"heading\">";
                 ptr +="<img src=\"(https://www.flaticon.com/premium-icon/house_2163350?term=house&page=1&position=3&page=1&position=3&related_id=2163350&origin=search)\">";
-                ptr +="<p>Odczyt na dworze:</p>";
+                ptr +="<p>Odczyt w domu:</p>";
                ptr +=" </div>";
                    ptr +=" <div class=\"parametres\">";
                       ptr +="<img srcl=\"(https://www.flaticon.com/premium-icon/high-temperature_1585441?term=temperature&page=1&position=6&page=1&position=6&related_id=1585441&origin=search)\">";
     
-                       ptr +=(float)TemperatureWeb;
+                       ptr +=(float)TempHouse;
                        ptr +="*C</p>";
                        ptr +="<img src=\"(https://www.flaticon.com/premium-icon/humidity_2828582?term=humidity&page=1&position=15&page=1&position=15&related_id=2828582&origin=search)\">";
                       
-                       ptr +=(float)HumidityWeb;
+                       ptr +=(float)HumHouse;
                        ptr +="%</p>";
                        ptr +="<img src=\"(https://www.flaticon.com/free-icon/gauge_556958?term=atmospheric%20pressure&page=1&position=1&page=1&position=1&related_id=556958&origin=search)\">";
                        
-                       ptr +=(float)PressWeb;
-                       ptr +="hPa</p>";
+                       
                         
                     ptr +=" </div>";
                 
@@ -213,8 +215,8 @@ ptr +="</html>";
 
 /////////////////////////////////////////SETUP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
-  timeClient.begin();
-  
+  //timeClient.begin();
+  dht.begin();
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.display();
   delay(2000);
@@ -272,14 +274,16 @@ void handleRoot(){
   Temp_out = bme.readTemperature(); 
   Hum_out = bme.readHumidity(); 
   Press_out = bme.readPressure() /100.0F;
-  server.send(200, "text/html", HTML_page(Temp_out,Hum_out,Press_out)); 
+  server.send(200, "text/html", HTML_page(Temp_out,Hum_out,Press_out,Temp_house,Hum_house)); 
+  Temp_house = dht.readTemperature();
+  Hum_house = dht.readHumidity();
 
 
 }
 /////////////////////////////////////////LOOP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() {
-  timeClient.update();
+//  timeClient.update();
   OLED_display();
   server.handleClient();
   /*
