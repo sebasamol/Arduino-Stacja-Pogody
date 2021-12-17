@@ -21,6 +21,7 @@ String HTML_page(float TemperatureWeb,float HumidityWeb,float PressWeb,float Hum
 float Temp_out;
 float Hum_out;
 float Press_out;
+
 float Temp_house;
 float Hum_house;
 
@@ -46,24 +47,8 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb,float Hu
         ptr +="<meta http-equiv='content-language' content='pl' />";
         ptr+="<meta charset=\"UTF-8\">";
         ptr +="<title>Stacja meteorologiczna ESP8266 </title>";
-        ptr +="<link rel=\"icon\" href=\"https://www.flaticon.com/free-icon/station_1809820?term=weather%20station&page=1&position=11&page=1&position=11&related_id=1809820&origin=search\">";
+        ptr +="<link rel=\"icon\" href=\"https://cdn-icons-png.flaticon.com/512/1753/1753451.png\">";
         
-    ptr +="<script>";
-       ptr +=" function display_c(){";
-            ptr +="var refresh=1000;";
-            ptr +="mytime=setTimeout(\'display_ct()\',refresh)";
-            ptr +="}";
-
-            ptr +="function display_ct() {";
-               ptr +=" var x = new Date()";
-                ptr +="var x1=x.toUTCString();";
-                ptr +="document.getElementById(\'ct\').innerHTML = x1;";
-               ptr +=" tt=display_c();";
-            ptr +="}";
-            ptr +="setTimeout(function(){";
-           ptr +=" window.location.reload(1);";
-           ptr +=" }, 5000);";
-    ptr +="</script>";
     ptr +="<style>";
     ptr +="body";
 ptr +="{";
@@ -103,8 +88,8 @@ ptr +=".heading p";
 ptr +="{";
     ptr +="text-align: center;";
     ptr +="font-size: 25px;";
-    ptr+="font-family: 'Courier New', Courier, monospace;";
-    ptr+="margin-left: 15px;";
+    ptr +="font-family: 'Courier New', Courier, monospace;";
+    ptr +="margin-left: 15px;";
 
 ptr +="}";
 ptr +=".heading";
@@ -133,7 +118,7 @@ ptr +="{";
     ptr +="margin-left: 20px;";
 ptr +="}";
 
-ptr +="parametres img";
+ptr +=".parametres img";
 ptr +="{";
     ptr +="top: 5px;";
     ptr +="left: 5px;";
@@ -163,39 +148,37 @@ ptr +="}";
 
           ptr +="<div class=\"container\">";
              ptr +="<div class=\"heading\">";
-                ptr +="<img src=\"(https://www.flaticon.com/premium-icon/landscape_3000665?term=outdoor&page=1&position=6&page=1&position=6&related_id=3000665&origin=search)\">";
+                ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/3936/3936819.png\">";
                  ptr +="<p>Odczyt na zewnątrz:</p>";
              ptr +="</div>";
                    ptr +=" <div class=\"parametres\">";
-                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/high-temperature_1585441?term=temperature&page=1&position=6&page=1&position=6&related_id=1585441&origin=search)\">";
-                      
+                       
                        ptr +=(float)TemperatureWeb;
                        ptr +="*C</p>";
-                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/humidity_2828582?term=humidity&page=1&position=15&page=1&position=15&related_id=2828582&origin=search)\">";
+                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/1585/premium/1585441.png?token=exp=1639763577~hmac=369ca6699763fa2bd7288abe02ca4eec\">";
                        
                        ptr +=(float)HumidityWeb;
                        ptr +="%</p>";
-                       ptr +="<img src=\"(https://www.flaticon.com/free-icon/gauge_556958?term=atmospheric%20pressure&page=1&position=1&page=1&position=1&related_id=556958&origin=search)\">";
+                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3262/premium/3262966.png?token=exp=1639763615~hmac=50925a39837d4c01c3dd0c2cb595d8fb\">";
                        
                        ptr +=(float)PressWeb;
                        ptr +="hPa</p>";
-                        
+                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3872/premium/3872582.png?token=exp=1639763662~hmac=51bb06239ebfee9f4fb8bed1d0845a3b\">";
                    ptr +="</div>";
               
              ptr +=" <div class=\"heading\">";
-                ptr +="<img src=\"(https://www.flaticon.com/premium-icon/house_2163350?term=house&page=1&position=3&page=1&position=3&related_id=2163350&origin=search)\">";
+                ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/2163/premium/2163350.png?token=exp=1639763693~hmac=c319e4348e7f18b878494ffe4c4b7dfe\">";
                 ptr +="<p>Odczyt w domu:</p>";
                ptr +=" </div>";
                    ptr +=" <div class=\"parametres\">";
-                      ptr +="<img srcl=\"(https://www.flaticon.com/premium-icon/high-temperature_1585441?term=temperature&page=1&position=6&page=1&position=6&related_id=1585441&origin=search)\">";
-    
+                      
                        ptr +=(float)TempHouse;
                        ptr +="*C</p>";
-                       ptr +="<img src=\"(https://www.flaticon.com/premium-icon/humidity_2828582?term=humidity&page=1&position=15&page=1&position=15&related_id=2828582&origin=search)\">";
+                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/1585/premium/1585441.png?token=exp=1639763577~hmac=369ca6699763fa2bd7288abe02ca4eec\">";
                       
                        ptr +=(float)HumHouse;
                        ptr +="%</p>";
-                       ptr +="<img src=\"(https://www.flaticon.com/free-icon/gauge_556958?term=atmospheric%20pressure&page=1&position=1&page=1&position=1&related_id=556958&origin=search)\">";
+                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3262/premium/3262966.png?token=exp=1639763615~hmac=50925a39837d4c01c3dd0c2cb595d8fb\">";
                        
                        
                         
@@ -274,10 +257,10 @@ void handleRoot(){
   Temp_out = bme.readTemperature(); 
   Hum_out = bme.readHumidity(); 
   Press_out = bme.readPressure() /100.0F;
-  server.send(200, "text/html", HTML_page(Temp_out,Hum_out,Press_out,Temp_house,Hum_house)); 
+  
   Temp_house = dht.readTemperature();
   Hum_house = dht.readHumidity();
-
+  server.send(200, "text/html", HTML_page(Temp_out,Hum_out,Press_out,Temp_house,Hum_house)); 
 
 }
 /////////////////////////////////////////LOOP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
