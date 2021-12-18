@@ -1,9 +1,6 @@
-#include <NTPClient.h>
-#include <WiFiUdp.h>
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <SPI.h>
-#include <Wire.h>
 #include "DHT.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -30,7 +27,6 @@ const char* ssid = "CGA2121_7QPJvFa";
 const char* password = "pUCafjBwtY9rcyDeb6";  
 
 
-WiFiUDP ntpUDP;
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 DHT dht(DHTPIN, DHTTYPE);
@@ -46,25 +42,43 @@ String HTML_page(float TemperatureWeb,float HumidityWeb, float PressWeb,float Hu
         ptr +="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
         ptr +="<meta http-equiv='content-language' content='pl' />";
         ptr+="<meta charset=\"UTF-8\">";
+        ptr+="<meta http-equiv=\"refresh\" content=\"5\">";
         ptr +="<title>Stacja meteorologiczna ESP8266 </title>";
         ptr +="<link rel=\"icon\" href=\"https://cdn-icons-png.flaticon.com/512/1753/1753451.png\">";
-        
+        ptr +="<script>";
+          ptr +="function startTime() {";
+            ptr +="const today = new Date();";
+            ptr +="let h = today.getHours();";
+            ptr +="let m = today.getMinutes();";
+            ptr +="let s = today.getSeconds();";
+            ptr +="m = checkTime(m);";
+            ptr +="s = checkTime(s);";
+            ptr +="document.getElementById(\'txt\').innerHTML =  h + \":\" + m + \":\" + s;";
+            ptr +="setTimeout(startTime, 1000);";
+        ptr +="}";
+
+            ptr +="function checkTime(i) {";
+            ptr +="if (i < 10) {i = \"0\" + i};";
+            ptr +="return i;";
+            ptr +="}";
+           
+        ptr +="</script>";
     ptr +="<style>";
-    ptr +="body";
+   ptr +="body";
 ptr +="{";
     ptr +="background-image: radial-gradient(73% 147%, #EADFDF 59%, #ECE2DF 100%), radial-gradient(91% 146%, rgba(255,255,255,0.50) 47%, rgba(0,0,0,0.50) 100%);";
     ptr +="background-blend-mode: screen;";
     ptr +="background-repeat: no-repeat;";
     ptr +="background-attachment: fixed;";
     ptr +="background-position: center;";
+    ptr +="overflow: hidden;";
 ptr +="}";
 ptr +="h1";
-ptr +="{  "; 
-  ptr +="font-weight: normal;";
+ptr +="{   font-weight: normal;";
     ptr +="font-size: 40px;";
     ptr +="padding: 10px;";
     ptr +="text-align: center;";
-    ptr +="font-family: 'Courier New', Courier, monospace;";
+    ptr +="font-family: \'Courier New\', Courier, monospace;";
     
     
 ptr +="}";
@@ -88,7 +102,7 @@ ptr +=".heading p";
 ptr +="{";
     ptr +="text-align: center;";
     ptr +="font-size: 25px;";
-    ptr +="font-family: 'Courier New', Courier, monospace;";
+    ptr +="font-family: \'Courier New\', Courier, monospace;";
     ptr +="margin-left: 15px;";
 
 ptr +="}";
@@ -113,9 +127,9 @@ ptr +="{";
     
     ptr +="font-size: 18px;";
     ptr +="padding: 10px;";
-    ptr +="font-family: 'Courier New', Courier, monospace;";
+    ptr +="font-family: \'Courier New\', Courier, monospace;";
     ptr +="display: inline-flex;";
-    ptr +="margin-left: 20px;";
+    
 ptr +="}";
 
 ptr +=".parametres img";
@@ -126,69 +140,60 @@ ptr +="{";
     ptr +="height: 40px;";
     ptr +="width: 40px;";
 ptr +="}";
- ptr +=".parametres p";
+ptr +=".parametres p";
  ptr +="{";
      ptr +="margin-left: 10px;";
  ptr +="}";
- 
 
-ptr +="span";
-ptr +="{";
-    ptr +="padding: 15px;";
-    ptr +="margin-left: 15px;";
-    ptr +="font-size: 20px;";
-ptr +="}";
     ptr +="</style>";
-   ptr +=" </head>";
+    ptr +=" </head>";
     ptr +="<body>";
-       ptr +=" <h1>Stacja meteorologiczna</h1>";
-           ptr +=" <body style=\"text-align: center; font-family: 'Courier New', Courier, mononospace;\"  onload=\"display_ct()\">";
-               ptr +="<span id=\'ct\'></span>";
-           ptr +="</body>";
+      ptr +="<h2>Stacja meteorologiczna</h2>";
+            ptr +="<body style=\"text-align: center; font-family: \'Courier New\', Courier, mononospace;\"  onload=\"startTime()\">";
+                ptr +="<div id=\"txt\"></div>";
 
-          ptr +="<div class=\"container\">";
-             ptr +="<div class=\"heading\">";
-                ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/3936/3936819.png\">";
-                 ptr +="<p>Odczyt na zewnątrz:</p>";
-             ptr +="</div>";
-                   ptr +=" <div class=\"parametres\">";
+           ptr +=" <div class=\"container\">";
+              ptr +="<div class=\"heading\">";
+                  ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/829/829180.png\">";
+                  ptr +="<p>Odczyt na zewnątrz:</p>";
+              ptr +="</div>";
+                    ptr +="<div class=\"parametres\">";
+                        ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/481/481431.png\">";
+                        ptr +=(float)TemperatureWeb; 
+                        ptr +="<p>*C</p>";
                        
-                       ptr +=(float)TemperatureWeb;
-                       ptr +="*C</p>";
-                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/1585/premium/1585441.png?token=exp=1639763577~hmac=369ca6699763fa2bd7288abe02ca4eec\">";
-                       
-                       ptr +=(float)HumidityWeb;
-                       ptr +="%</p>";
-                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3262/premium/3262966.png?token=exp=1639763615~hmac=50925a39837d4c01c3dd0c2cb595d8fb\">";
-                       
-                       ptr +=(float)PressWeb;
-                       ptr +="hPa</p>";
-                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3872/premium/3872582.png?token=exp=1639763662~hmac=51bb06239ebfee9f4fb8bed1d0845a3b\">";
-                   ptr +="</div>";
-              
-             ptr +=" <div class=\"heading\">";
-                ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/2163/premium/2163350.png?token=exp=1639763693~hmac=c319e4348e7f18b878494ffe4c4b7dfe\">";
-                ptr +="<p>Odczyt w domu:</p>";
-               ptr +=" </div>";
-                   ptr +=" <div class=\"parametres\">";
+                        ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/727/727790.png\">";
+                        ptr +=(float)HumidityWeb;  
+                        ptr +="<p>%</p>";
                       
-                       ptr +=(float)TempHouse;
-                       ptr +="*C</p>";
-                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/1585/premium/1585441.png?token=exp=1639763577~hmac=369ca6699763fa2bd7288abe02ca4eec\">";
-                      
-                       ptr +=(float)HumHouse;
-                       ptr +="%</p>";
-                       ptr +="<img src=\"https://cdn-icons.flaticon.com/png/512/3262/premium/3262966.png?token=exp=1639763615~hmac=50925a39837d4c01c3dd0c2cb595d8fb\">";
-                       
-                       
+                        ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/481/481430.png\">";
+                        ptr +=(float)PressWeb; 
+                        ptr +="<p>hPa</p>";
                         
-                    ptr +=" </div>";
+                        
+                    ptr +="</div>";
+              
+              ptr +="<div class=\"heading\">";
+                  ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/263/263115.png\">";
+                  ptr +="<p>Odczyt na dworze:</p>";
+                ptr +="</div>";
+                    ptr +="<div class=\"parametres\">";
+                        ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/481/481431.png\">";
+                        ptr +=(float)HumHouse;
+                        ptr +="</p>*C</p>";
+                        ptr +="<img src=\"https://cdn-icons-png.flaticon.com/512/4150/4150958.png\">";
+                        ptr +=(float)TempHouse;
+                        ptr +="</p>%</p>";
+                        
+                        
+                        
+                     ptr +="</div>";
                 
-           ptr +=" </div>";
-           ptr +=" <div id=\"info\">";
-              ptr +="<p>Pomiary dla miasta Poznań</p>";
-              ptr +="<a href=\"https://www.accuweather.com/pl/pl/pozna%C5%84/276594/weather-forecast/276594\">Tu znajdziesz szczegółową prognozę pogody</a>";
-           ptr+=" </div>";
+            ptr +="</div>";
+            ptr +="<div id=\"info\">";
+                ptr +="<p>Pomiary dla miasta Poznań</p>";
+                ptr +="<a href=\"https://www.accuweather.com/pl/pl/pozna%C5%84/276594/weather-forecast/276594\">Tu znajdziesz szczegółową prognozę pogody</a>";
+            ptr +="</div>";
 
     ptr +="</body>";
 ptr +="</html>";
@@ -198,7 +203,7 @@ ptr +="</html>";
 
 /////////////////////////////////////////SETUP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
-  //timeClient.begin();
+
   dht.begin();
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.display();
@@ -229,7 +234,7 @@ void setup() {
 
   
 } 
-//WYŚWIETLANIE DANYCH Z CZUJNIKA NA OLED
+/////////////////////////////////////////FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void OLED_display(){
   
   display.clearDisplay(); 
@@ -266,32 +271,8 @@ void handleRoot(){
 /////////////////////////////////////////LOOP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() {
-//  timeClient.update();
+
   OLED_display();
   server.handleClient();
-  /*
-  client.print("Temperatura: ");
-  client.println(bme.readTemperature());
-  client.print("Cisnienie: ");
-  client.println(bme.readPressure() /100.0F);
-  client.print("Wilgotnosc: ");
-  client.println(bme.readHumidity());
-  
-  OLED_display();
-  
-  client.print(daysOfTheWeek[timeClient.getDay()]);
-  client.print(", ");
-  client.print(timeClient.getHours());
-  client.print(":");
-  client.print(timeClient.getMinutes());
-  client.print(":");
-  client.print(timeClient.getSeconds());
-  */
-  
-  
-  
-  
-  
-  
   
   }
