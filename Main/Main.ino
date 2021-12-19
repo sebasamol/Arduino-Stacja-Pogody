@@ -128,21 +128,21 @@ ptr +="{";
     ptr +="font-size: 18px;";
     ptr +="padding: 10px;";
     ptr +="font-family: \'Courier New\', Courier, monospace;";
-    ptr +="display: inline-flex;";
+    ptr +="display: ruby-base;";
     
 ptr +="}";
 
 ptr +=".parametres img";
 ptr +="{";
     ptr +="top: 5px;";
-    ptr +="left: 5px;";
+    ptr +="left: -2px;";
     ptr +="position: relative;";
     ptr +="height: 40px;";
     ptr +="width: 40px;";
 ptr +="}";
 ptr +=".parametres p";
  ptr +="{";
-     ptr +="margin-left: 10px;";
+     ptr +="margin-left: 2px;";
  ptr +="}";
 
     ptr +="</style>";
